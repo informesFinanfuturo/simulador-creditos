@@ -1,0 +1,1 @@
+{"chunks": [{"type": "html", "chunk_number": 1, "paragraphs": [{"paragraph_number": 1, "text": "Configure los par\u00e1metros de cr\u00e9dito y vea la tabla de amortizaci\u00f3n completa"}, {"paragraph_number": 2, "text": "Los puntos de retanqueo est\u00e1n resaltados en color"}], "token_count": 15}]}
