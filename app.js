@@ -59,7 +59,7 @@ generateCreditTable() {
     this.creditosTable.innerHTML = '';
 
     const montoDefecto = this.montoDefecto ? this.montoDefecto.value : 7000000;
-    const seguroVidaDefecto = this.seguroVidaDefecto ? this.seguroVidaDefecto.value : 0.34;
+    const seguroVidaDefecto = this.seguroVidaDefecto ? this.seguroVidaDefecto.value : 0.1;
     const interesDefecto = this.interesDefecto ? this.interesDefecto.value : 1.5;
     const plazoDefecto = this.plazoDefecto ? this.plazoDefecto.value : 12;
     const retanqueoDefecto = this.retanqueoDefecto ? this.retanqueoDefecto.value : 6;
@@ -380,7 +380,7 @@ this.amortizationTable.innerHTML = '';
     resetForm() {
         this.numCreditosInput.value = 3;
         if (this.montoDefecto) this.montoDefecto.value = 7000000;
-        if (this.seguroVidaDefecto) this.seguroVidaDefecto.value = 0.34;
+        if (this.seguroVidaDefecto) this.seguroVidaDefecto.value = 0.1;
         if (this.interesDefecto) this.interesDefecto.value = 1.5;
         if (this.plazoDefecto) this.plazoDefecto.value = 12;
         if (this.retanqueoDefecto) this.retanqueoDefecto.value = 6;
@@ -393,7 +393,7 @@ this.amortizationTable.innerHTML = '';
 aplicarValoresDefecto() {
     var numCreditos = parseInt(this.numCreditosInput.value) || 3;
     var montoDefecto = this.montoDefecto ? this.montoDefecto.value : 7000000;
-    var seguroVidaDefecto = this.seguroVidaDefecto ? this.seguroVidaDefecto.value : 0.34;
+    var seguroVidaDefecto = this.seguroVidaDefecto ? this.seguroVidaDefecto.value : 0.1;
     var interesDefecto = this.interesDefecto ? this.interesDefecto.value : 1.5;
     var plazoDefecto = this.plazoDefecto ? this.plazoDefecto.value : 12;
     var retanqueoDefecto = this.retanqueoDefecto ? this.retanqueoDefecto.value : 6;
