@@ -55,7 +55,7 @@ class CreditSimulator {
 
 
 generateCreditTable() {
-    const numCreditos = parseInt(this.numCreditosInput.value) || 3;
+    const numCreditos = parseInt(this.numCreditosInput.value) || 10;
     this.creditosTable.innerHTML = '';
 
     const montoDefecto = this.montoDefecto ? this.montoDefecto.value : 7000000;
@@ -378,7 +378,7 @@ this.amortizationTable.innerHTML = '';
     }
 
     resetForm() {
-        this.numCreditosInput.value = 3;
+        this.numCreditosInput.value = 10;
         if (this.montoDefecto) this.montoDefecto.value = 7000000;
         if (this.seguroVidaDefecto) this.seguroVidaDefecto.value = 0.1;
         if (this.interesDefecto) this.interesDefecto.value = 1.5;
@@ -391,7 +391,7 @@ this.amortizationTable.innerHTML = '';
     }
 
 aplicarValoresDefecto() {
-    var numCreditos = parseInt(this.numCreditosInput.value) || 3;
+    var numCreditos = parseInt(this.numCreditosInput.value) || 10;
     var montoDefecto = this.montoDefecto ? this.montoDefecto.value : 7000000;
     var seguroVidaDefecto = this.seguroVidaDefecto ? this.seguroVidaDefecto.value : 0.1;
     var interesDefecto = this.interesDefecto ? this.interesDefecto.value : 1.5;
