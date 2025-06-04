@@ -474,8 +474,28 @@
             width: auto;
             max-width: 150px;
         }
+
+        #contenidoParaPDF {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 24px;
+            box-sizing: border-box;
+        }
+
+        #contenidoParaPDF table {
+            width: 100%;
+            font-size: 12px;
+            border-collapse: collapse;
+        }
+th {
+    text-align: center;
+    vertical-align: middle;
+}
+
     </style>
 </head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 
 <body>
     <div class="container">
@@ -483,165 +503,175 @@
             <h1>Simulador de Crédito Múltiple con Retanqueo</h1>
             <p>Configure los parámetros de crédito y vea la tabla de amortización completa</p>
         </header>
-
-        <main>
-            <!-- Configuración -->
-            <section id="configSection">
-                <div class="card">
-                    <div class="card__header">
-                        <h2>Configuración de Créditos</h2>
-                        <div class="logo-container">
-                            <img src=".\logo_finanfuturo.png" alt="Logo" class="logo">
+        <section id="contenidoParaPDF">
+            <main>
+                <!-- Configuración -->
+                <section id="configSection">
+                    <div class="card">
+                        <div class="card__header">
+                            <h2>Configuración de Créditos</h2>
+                            <div class="logo-container">
+                                <img src=".\logo_finanfuturo.png" alt="Logo" class="logo">
+                            </div>
                         </div>
-                    </div>
 
 
-                    <div class="card__body">
-                        <!-- NUEVOS CAMPOS POR DEFECTO -->
-                        <div class="card mb-16">
-                            <div class="card__body">
-                                <div class="form-group">
-                                    <label for="numCreditos">Número de periodos o semestres a financiar (1-10):</label>
-                                    <input type="number" id="numCreditos" min="1" max="10" value="10">
+                        <div class="card__body">
+                            <!-- NUEVOS CAMPOS POR DEFECTO -->
+                            <div class="card mb-16">
+                                <div class="card__body">
+                                    <div class="form-group">
+                                        <label for="numCreditos">Número de periodos o semestres a financiar
+                                            (1-10):</label>
+                                        <input type="number" id="numCreditos" min="1" max="10" value="10">
+                                    </div>
+                                    <!-- Primera fila: Monto, Seguro de Vida e Interés -->
+                                    <div class="form-row">
+                                        <div class="form-group form-group-third">
+                                            <label for="montoDefecto">Monto por periodo o semestre ($):</label>
+                                            <input type="number" id="montoDefecto" value="7000000" min="1" step="1000">
+                                        </div>
+                                        <div class="form-group form-group-third">
+                                            <label for="seguroVidaDefecto">Seguro de Vida (%):</label>
+                                            <input type="number" id="seguroVidaDefecto" value="0.1" min="0" max="10"
+                                                step="0.01">
+                                        </div>
+                                        <div class="form-group form-group-third">
+                                            <label for="interesDefecto">Interés mes vencido (%):</label>
+                                            <input type="number" id="interesDefecto" value="1.5" min="0.01" max="100"
+                                                step="0.01">
+                                        </div>
+                                    </div>
+
+                                    <!-- Segunda fila: Plazo, Retanqueo y Comisión -->
+                                    <div class="form-row">
+                                        <div class="form-group form-group-third">
+                                            <label for="plazoDefecto">Plazo (Meses):</label>
+                                            <input type="number" id="plazoDefecto" value="12" min="1" max="360"
+                                                step="1">
+                                        </div>
+                                        <div class="form-group form-group-third">
+                                            <label for="retanqueoDefecto">Frecuencia de Retanqueo (Meses):</label>
+                                            <input type="number" id="retanqueoDefecto" value="6" min="1" max="360"
+                                                step="1">
+                                        </div>
+                                        <div class="form-group-third">
+                                            <label for="comisionFondoDefecto">Comisión F.G. (%):</label>
+                                            <input type="number" id="comisionFondoDefecto" value="4.0" min="0" max="100"
+                                                step="0.01">
+                                        </div>
+                                    </div>
+
+                                    <button id="aplicarDefectosBtn" class="btn btn--outline">Aplicar Valores por
+                                        Defecto</button>
                                 </div>
-                                <!-- Primera fila: Monto, Seguro de Vida e Interés -->
-                                <div class="form-row">
-                                    <div class="form-group form-group-third">
-                                        <label for="montoDefecto">Monto por periodo o semestre ($):</label>
-                                        <input type="number" id="montoDefecto" value="7000000" min="1" step="1000">
-                                    </div>
-                                    <div class="form-group form-group-third">
-                                        <label for="seguroVidaDefecto">Seguro de Vida (%):</label>
-                                        <input type="number" id="seguroVidaDefecto" value="0.1" min="0" max="10"
-                                            step="0.01">
-                                    </div>
-                                    <div class="form-group form-group-third">
-                                        <label for="interesDefecto">Interés mes vencido (%):</label>
-                                        <input type="number" id="interesDefecto" value="1.5" min="0.01" max="100"
-                                            step="0.01">
-                                    </div>
+                            </div>
+
+
+
+                            <div class="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>CRÉDITO</th>
+                                            <th>MONTO POR PERIODO O SEMESTRE ($)</th>
+                                            <th>SEGURO DE VIDA (%)</th>
+                                            <th>INTERÉS MENSUAL (%)</th>
+                                            <th>PLAZO (Meses)</th>
+                                            <th>FRECUENCIA DE RETANQUEO (Meses)</th>
+                                            <th>COMISIÓN F.G. (Factura independiente)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="creditosTable">
+                                        <!-- Se llena dinámicamente -->
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="actions-container">
+                                <button id="calcularBtn" class="btn btn--outline">Calcular Simulación</button>
+                                <button id="resetBtn" class="btn btn--outline">Resetear</button>
+                            </div>
+
+
+                            <div id="errorMessages" class="error-container hidden"></div>
+                        </div>
+                    </div>
+                </section>
+
+
+
+
+
+                <!-- Resultados -->
+                <section id="resultadosSection" class="hidden">
+                    <!-- Resumen -->
+                    <div class="card mb-16">
+                        <div class="card__header">
+                            <h3>Resumen de la Simulación</h3>
+                        </div>
+                        <div class="card__body">
+                            <div class="summary-grid">
+                                <div class="summary-item">
+                                    <span class="summary-label">Total Períodos:</span>
+                                    <span id="totalPeriodos" class="summary-value">-</span>
                                 </div>
-
-                                <!-- Segunda fila: Plazo, Retanqueo y Comisión -->
-                                <div class="form-row">
-                                    <div class="form-group form-group-third">
-                                        <label for="plazoDefecto">Plazo (Meses):</label>
-                                        <input type="number" id="plazoDefecto" value="12" min="1" max="360" step="1">
-                                    </div>
-                                    <div class="form-group form-group-third">
-                                        <label for="retanqueoDefecto">Frecuencia de Retanqueo (Meses):</label>
-                                        <input type="number" id="retanqueoDefecto" value="6" min="1" max="360" step="1">
-                                    </div>
-                                    <div class="form-group-third">
-                                        <label for="comisionFondoDefecto">Comisión F.G. (%):</label>
-                                        <input type="number" id="comisionFondoDefecto" value="4.0" min="0" max="100"
-                                            step="0.01">
-                                    </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">Monto Total Inicial:</span>
+                                    <span id="montoTotal" class="summary-value">-</span>
                                 </div>
-
-                                <button id="aplicarDefectosBtn" class="btn btn--outline">Aplicar Valores por
-                                    Defecto</button>
-                            </div>
-                        </div>
-
-
-
-                        <div class="table-container">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>CRÉDITO</th>
-                                        <th>MONTO POR PERIODO O SEMESTRE ($)</th>
-                                        <th>SEGURO DE VIDA (%)</th>
-                                        <th>INTERÉS MENSUAL (%)</th>
-                                        <th>PLAZO (MESES)</th>
-                                        <th>FRECUENCIA DE RETANQUEO (MESES)</th>
-                                        <th>Comisión F.G. (Factura independiente)</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="creditosTable">
-                                    <!-- Se llena dinámicamente -->
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div class="actions-container">
-                            <button id="calcularBtn" class="btn btn--outline">Calcular Simulación</button>
-                            <button id="resetBtn" class="btn btn--outline">Resetear</button>
-                        </div>
-
-
-                        <div id="errorMessages" class="error-container hidden"></div>
-                    </div>
-                </div>
-            </section>
-
-
-
-
-
-            <!-- Resultados -->
-            <section id="resultadosSection" class="hidden">
-                <!-- Resumen -->
-                <div class="card mb-16">
-                    <div class="card__header">
-                        <h3>Resumen de la Simulación</h3>
-                    </div>
-                    <div class="card__body">
-                        <div class="summary-grid">
-                            <div class="summary-item">
-                                <span class="summary-label">Total Períodos:</span>
-                                <span id="totalPeriodos" class="summary-value">-</span>
-                            </div>
-                            <div class="summary-item">
-                                <span class="summary-label">Monto Total Inicial:</span>
-                                <span id="montoTotal" class="summary-value">-</span>
-                            </div>
-                            <div class="summary-item">
-                                <span class="summary-label">Total Intereses:</span>
-                                <span id="totalIntereses" class="summary-value">-</span>
-                            </div>
-                            <div class="summary-item">
-                                <span class="summary-label">Total Pagado:</span>
-                                <span id="totalPagado" class="summary-value">-</span>
+                                <div class="summary-item">
+                                    <span class="summary-label">Total Intereses:</span>
+                                    <span id="totalIntereses" class="summary-value">-</span>
+                                </div>
+                                <div class="summary-item">
+                                    <span class="summary-label">Total Pagado:</span>
+                                    <span id="totalPagado" class="summary-value">-</span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Tabla de Amortización -->
-                <div class="card">
-                    <div class="card__header">
-                        <h3>Tabla de Amortización</h3>
-                        <p class="text-secondary">Los puntos de retanqueo están resaltados en color</p>
-                    </div>
-                    <div class="card__body">
-                        <div class="table-container">
-                            <table class="amortization-table">
-                                <thead>
-                                    <tr>
-                                        <th>Período</th>
-                                        <th>Crédito</th>
-                                        <th>Saldo Inicial</th>
-                                        <th>Cuota Base</th>
-                                        <th>Seguro de Vida</th> <!-- NUEVA COLUMNA -->
-                                        <th>Cuota Total</th>
-                                        <th>Interés</th>
-                                        <th>Capital</th>
-                                        <th>Saldo Final</th>
-                                        <th>Observaciones</th>
-                                        <th>Comisión F.G. (Factura independiente)</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="amortizationTable">
-                                    <!-- Se llena dinámicamente -->
-                                </tbody>
-                            </table>
+                    <!-- Tabla de Amortización -->
+                    <div class="card">
+                        <div class="card__header">
+                            <h3>Tabla de Amortización</h3>
+                            <p class="text-secondary">Los puntos de retanqueo están resaltados en color</p>
+                        </div>
+                        <div class="card__body">
+                            <div class="table-container">
+                                <table class="amortization-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Período</th>
+                                            <th>Crédito</th>
+                                            <th>Saldo Inicial</th>
+                                            <th>Cuota Base</th>
+                                            <th>Seguro de Vida</th> <!-- NUEVA COLUMNA -->
+                                            <th>Cuota Total</th>
+                                            <th>Interés</th>
+                                            <th>Capital</th>
+                                            <th>Saldo Final</th>
+                                            <th>Observaciones</th>
+                                            <th>Comisión F.G. (Factura independiente)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="amortizationTable">
+                                        <!-- Se llena dinámicamente -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div style="max-width: 260px; margin: 24px auto 0 auto;">
+                                <button id="descargarPDFBtn" class="btn btn--outline">
+                                    Descargar simulación en PDF
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
-        </main>
+                </section>
+            </main>
+        </section>
+
     </div>
 
     <script src="app.js"></script>

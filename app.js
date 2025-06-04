@@ -45,41 +45,41 @@ class CreditSimulator {
             });
         }
 
-            if (this.seguroVidaDefecto) {
-        this.seguroVidaDefecto.addEventListener('input', () => {
-            this.actualizarSeguroVidaEnTabla();
-        });
+        if (this.seguroVidaDefecto) {
+            this.seguroVidaDefecto.addEventListener('input', () => {
+                this.actualizarSeguroVidaEnTabla();
+            });
+        }
     }
+
+
+
+    generateCreditTable() {
+        const numCreditos = parseInt(this.numCreditosInput.value) || 10;
+        this.creditosTable.innerHTML = '';
+
+        const montoDefecto = this.montoDefecto ? this.montoDefecto.value : 7000000;
+        const seguroVidaDefecto = this.seguroVidaDefecto ? this.seguroVidaDefecto.value : 0.1;
+        const interesDefecto = this.interesDefecto ? this.interesDefecto.value : 1.5;
+        const plazoDefecto = this.plazoDefecto ? this.plazoDefecto.value : 12;
+        const retanqueoDefecto = this.retanqueoDefecto ? this.retanqueoDefecto.value : 6;
+        const comisionDefecto = this.comisionFondoDefecto ? this.comisionFondoDefecto.value : 4.0;
+
+        for (let i = 1; i <= numCreditos; i++) {
+            const row = document.createElement('tr');
+
+            const html = '<td>' + i + '</td>' +
+                '<td><input type="number" id="monto' + i + '" value="' + montoDefecto + '" min="1" step="1000"></td>' +
+                '<td><input type="number" id="seguroVida' + i + '" value="' + seguroVidaDefecto + '" min="0" max="10" step="0.01"></td>' +
+                '<td><input type="number" id="interes' + i + '" value="' + interesDefecto + '" min="0.01" max="100" step="0.01"></td>' +
+                '<td><input type="number" id="plazo' + i + '" value="' + plazoDefecto + '" min="1" max="360" step="1"></td>' +
+                '<td><input type="number" id="retanqueo' + i + '" value="' + retanqueoDefecto + '" min="1" max="360" step="1"></td>' +
+                '<td><input type="number" id="comision' + i + '" value="' + comisionDefecto + '" min="0" step="0.01"></td>';
+
+            row.innerHTML = html;
+            this.creditosTable.appendChild(row);
+        }
     }
-
-
-
-generateCreditTable() {
-    const numCreditos = parseInt(this.numCreditosInput.value) || 10;
-    this.creditosTable.innerHTML = '';
-
-    const montoDefecto = this.montoDefecto ? this.montoDefecto.value : 7000000;
-    const seguroVidaDefecto = this.seguroVidaDefecto ? this.seguroVidaDefecto.value : 0.1;
-    const interesDefecto = this.interesDefecto ? this.interesDefecto.value : 1.5;
-    const plazoDefecto = this.plazoDefecto ? this.plazoDefecto.value : 12;
-    const retanqueoDefecto = this.retanqueoDefecto ? this.retanqueoDefecto.value : 6;
-    const comisionDefecto = this.comisionFondoDefecto ? this.comisionFondoDefecto.value : 4.0;
-
-    for (let i = 1; i <= numCreditos; i++) {
-        const row = document.createElement('tr');
-        
-        const html = '<td>' + i + '</td>' +
-                    '<td><input type="number" id="monto' + i + '" value="' + montoDefecto + '" min="1" step="1000"></td>' +
-                    '<td><input type="number" id="seguroVida' + i + '" value="' + seguroVidaDefecto + '" min="0" max="10" step="0.01"></td>' +
-                    '<td><input type="number" id="interes' + i + '" value="' + interesDefecto + '" min="0.01" max="100" step="0.01"></td>' +
-                    '<td><input type="number" id="plazo' + i + '" value="' + plazoDefecto + '" min="1" max="360" step="1"></td>' +
-                    '<td><input type="number" id="retanqueo' + i + '" value="' + retanqueoDefecto + '" min="1" max="360" step="1"></td>' +
-                    '<td><input type="number" id="comision' + i + '" value="' + comisionDefecto + '" min="0" step="0.01"></td>';
-        
-        row.innerHTML = html;
-        this.creditosTable.appendChild(row);
-    }
-}
 
     validateInputs() {
         const errors = [];
@@ -143,28 +143,29 @@ generateCreditTable() {
         }
     }
 
-getCreditsData() {
-    const numCreditos = parseInt(this.numCreditosInput.value);
-    const credits = [];
+    getCreditsData() {
+        const numCreditos = parseInt(this.numCreditosInput.value);
+        const credits = [];
 
-    for (let i = 1; i <= numCreditos; i++) {
-        const monto = parseFloat(document.getElementById('monto' + i).value);
-        const seguroVidaPorcentaje = parseFloat(document.getElementById('seguroVida' + i).value) || 0;
-        const comisionPorcentaje = parseFloat(document.getElementById('comision' + i).value) || 0;
-        
-        credits.push({
-            numero: i,
-            monto: monto,
-            seguroVidaPorcentaje: seguroVidaPorcentaje,
-            interes: parseFloat(document.getElementById('interes' + i).value),
-            plazo: parseInt(document.getElementById('plazo' + i).value),
-            retanqueo: parseInt(document.getElementById('retanqueo' + i).value),
-            porcentajeComision: comisionPorcentaje
-        });
+        for (let i = 1; i <= numCreditos; i++) {
+            const monto = parseFloat(document.getElementById('monto' + i).value);
+            const seguroVidaPorcentaje = parseFloat(document.getElementById('seguroVida' + i).value) || 0;
+            const comisionPorcentaje = parseFloat(document.getElementById('comision' + i).value) || 0;
+
+            credits.push({
+                numero: i,
+                monto: monto,
+                montoOriginal: monto,
+                seguroVidaPorcentaje: seguroVidaPorcentaje,
+                interes: parseFloat(document.getElementById('interes' + i).value),
+                plazo: parseInt(document.getElementById('plazo' + i).value),
+                retanqueo: parseInt(document.getElementById('retanqueo' + i).value),
+                porcentajeComision: comisionPorcentaje
+            });
+        }
+
+        return credits;
     }
-
-    return credits;
-}
 
 
     calculateAmortization(credits) {
@@ -239,83 +240,84 @@ getCreditsData() {
         };
     }
 
-    
-displayResults(amortization, credits) {
-    // === SECCIÓN 1: MOSTRAR RESUMEN ===
-    const montoTotalInicial = credits.reduce((sum, credit) => {
-        const originalMonto = credit.numero === 1 ? credit.monto :
-            credits.find(c => c.numero === credit.numero).monto;
-        return sum + (credit.numero <= credits.length ?
-            credits[credit.numero - 1].monto / credits.length : 0);
-    }, 0);
 
-    this.totalPeriodos.textContent = amortization.totalPeriodos;
-    this.montoTotal.textContent = this.formatCurrency(credits[0].monto * credits.length);
-    this.totalIntereses.textContent = this.formatCurrency(amortization.totalIntereses);
-    this.totalPagado.textContent = this.formatCurrency(amortization.totalPagado);
+    displayResults(amortization, credits) {
+        console.log(credits)
+        // === SECCIÓN 1: MOSTRAR RESUMEN ===
+        const montoTotalInicial = credits.reduce((sum, credit) => {
+            const originalMonto = credit.numero === 1 ? credit.monto :
+                credits.find(c => c.numero === credit.numero).monto;
+            return sum + (credit.numero <= credits.length ?
+                credits[credit.numero - 1].monto / credits.length : 0);
+        }, 0);
 
-    // === SECCIÓN 2: LIMPIAR TABLA ===
-    this.amortizationTable.innerHTML = '';
+        this.totalPeriodos.textContent = amortization.totalPeriodos;
+        this.montoTotal.textContent = this.formatCurrency(credits[0].monto * credits.length);
+        this.totalIntereses.textContent = this.formatCurrency(amortization.totalIntereses);
+        this.totalPagado.textContent = this.formatCurrency(amortization.totalPagado);
 
-this.amortizationTable.innerHTML = '';
+        // === SECCIÓN 2: LIMPIAR TABLA ===
+        this.amortizationTable.innerHTML = '';
 
-    const creditosPrimerAparicion = new Map();
-    
-    // Primer pase: identificar primera aparición
-    amortization.periods.forEach((period, index) => {
-        let creditoNumero = 0;
-        if (period.credito) {
-            const creditoStr = String(period.credito);
-            let match = creditoStr.match(/Crédito\s*(\d+)/i) || 
-                       creditoStr.match(/(\d+)/) ||
-                       creditoStr.match(/Credit\s*(\d+)/i);
-            creditoNumero = match ? parseInt(match[1] || match[0]) : 0;
-        }
-        
-        if (creditoNumero > 0 && !creditosPrimerAparicion.has(creditoNumero)) {
-            creditosPrimerAparicion.set(creditoNumero, index);
-        }
-    });
+        this.amortizationTable.innerHTML = '';
 
-    // Segundo pase: generar tabla con seguro de vida
-    amortization.periods.forEach((period, index) => {
-        const row = document.createElement('tr');
-        if (period.rowClass) {
-            row.className = period.rowClass;
-        }
+        const creditosPrimerAparicion = new Map();
 
-        // Extraer número de crédito
-        let creditoNumero = 0;
-        if (period.credito) {
-            const creditoStr = String(period.credito);
-            let match = creditoStr.match(/Crédito\s*(\d+)/i) || 
-                       creditoStr.match(/(\d+)/) ||
-                       creditoStr.match(/Credit\s*(\d+)/i);
-            creditoNumero = match ? parseInt(match[1] || match[0]) : 0;
-        }
+        // Primer pase: identificar primera aparición
+        amortization.periods.forEach((period, index) => {
+            let creditoNumero = 0;
+            if (period.credito) {
+                const creditoStr = String(period.credito);
+                let match = creditoStr.match(/Crédito\s*(\d+)/i) ||
+                    creditoStr.match(/(\d+)/) ||
+                    creditoStr.match(/Credit\s*(\d+)/i);
+                creditoNumero = match ? parseInt(match[1] || match[0]) : 0;
+            }
 
-        const esPrimerPeriodo = creditosPrimerAparicion.get(creditoNumero) === index;
-        const creditoData = credits.find(c => c.numero === creditoNumero);
-        
-        // Calcular seguro de vida basado en el saldo inicial
-        let seguroVida = 0;
-        if (creditoData && creditoData.seguroVidaPorcentaje) {
-            seguroVida = period.saldoInicial * (creditoData.seguroVidaPorcentaje / 100);
-        }
+            if (creditoNumero > 0 && !creditosPrimerAparicion.has(creditoNumero)) {
+                creditosPrimerAparicion.set(creditoNumero, index);
+            }
+        });
 
-        // Calcular cuota total (cuota base + seguro de vida)
-        const cuotaTotal = period.cuota + seguroVida;
+        // Segundo pase: generar tabla con seguro de vida
+        amortization.periods.forEach((period, index) => {
+            const row = document.createElement('tr');
+            if (period.rowClass) {
+                row.className = period.rowClass;
+            }
 
-        // Calcular comisión F.G.
-        let comisionFG = 0;
-        if (esPrimerPeriodo && creditoData) {
-            const porcentajeComision = parseFloat(document.getElementById(`comision${creditoNumero}`).value) || 0;
-            comisionFG = creditoData.monto * (porcentajeComision / 100);
-        }
+            // Extraer número de crédito
+            let creditoNumero = 0;
+            if (period.credito) {
+                const creditoStr = String(period.credito);
+                let match = creditoStr.match(/Crédito\s*(\d+)/i) ||
+                    creditoStr.match(/(\d+)/) ||
+                    creditoStr.match(/Credit\s*(\d+)/i);
+                creditoNumero = match ? parseInt(match[1] || match[0]) : 0;
+            }
 
-        const comisionTexto = comisionFG > 0 ? this.formatCurrency(comisionFG) : '';
+            const esPrimerPeriodo = creditosPrimerAparicion.get(creditoNumero) === index;
+            const creditoData = credits.find(c => c.numero === creditoNumero);
 
-        row.innerHTML = `
+            // Calcular seguro de vida basado en el saldo inicial
+            let seguroVida = 0;
+            if (creditoData && creditoData.seguroVidaPorcentaje) {
+                seguroVida = period.saldoInicial * (creditoData.seguroVidaPorcentaje / 100);
+            }
+
+            // Calcular cuota total (cuota base + seguro de vida)
+            const cuotaTotal = period.cuota + seguroVida;
+
+            // Calcular comisión F.G.
+            let comisionFG = 0;
+            if (esPrimerPeriodo && creditoData) {
+                const porcentajeComision = parseFloat(document.getElementById(`comision${creditoNumero}`).value) || 0;
+                comisionFG = creditoData.montoOriginal * (porcentajeComision / 100);
+            }
+
+            const comisionTexto = comisionFG > 0 ? this.formatCurrency(comisionFG) : '';
+
+            row.innerHTML = `
             <td>${period.periodo}</td>
             <td>${period.credito}</td>
             <td class="currency">${this.formatCurrency(period.saldoInicial)}</td>
@@ -331,12 +333,12 @@ this.amortizationTable.innerHTML = '';
             </td>
         `;
 
-        this.amortizationTable.appendChild(row);
-    });
+            this.amortizationTable.appendChild(row);
+        });
 
-    this.resultadosSection.classList.remove('hidden');
-    this.resultadosSection.scrollIntoView({ behavior: 'smooth' });
-}
+        this.resultadosSection.classList.remove('hidden');
+        this.resultadosSection.scrollIntoView({ behavior: 'smooth' });
+    }
 
 
 
@@ -390,31 +392,31 @@ this.amortizationTable.innerHTML = '';
         this.resultadosSection.classList.add('hidden');
     }
 
-aplicarValoresDefecto() {
-    var numCreditos = parseInt(this.numCreditosInput.value) || 10;
-    var montoDefecto = this.montoDefecto ? this.montoDefecto.value : 7000000;
-    var seguroVidaDefecto = this.seguroVidaDefecto ? this.seguroVidaDefecto.value : 0.1;
-    var interesDefecto = this.interesDefecto ? this.interesDefecto.value : 1.5;
-    var plazoDefecto = this.plazoDefecto ? this.plazoDefecto.value : 12;
-    var retanqueoDefecto = this.retanqueoDefecto ? this.retanqueoDefecto.value : 6;
-    var comisionDefecto = this.comisionFondoDefecto ? this.comisionFondoDefecto.value : 4.0;
+    aplicarValoresDefecto() {
+        var numCreditos = parseInt(this.numCreditosInput.value) || 10;
+        var montoDefecto = this.montoDefecto ? this.montoDefecto.value : 7000000;
+        var seguroVidaDefecto = this.seguroVidaDefecto ? this.seguroVidaDefecto.value : 0.1;
+        var interesDefecto = this.interesDefecto ? this.interesDefecto.value : 1.5;
+        var plazoDefecto = this.plazoDefecto ? this.plazoDefecto.value : 12;
+        var retanqueoDefecto = this.retanqueoDefecto ? this.retanqueoDefecto.value : 6;
+        var comisionDefecto = this.comisionFondoDefecto ? this.comisionFondoDefecto.value : 4.0;
 
-    for (var i = 1; i <= numCreditos; i++) {
-        var montoInput = document.getElementById('monto' + i);
-        var seguroVidaInput = document.getElementById('seguroVida' + i);
-        var interesInput = document.getElementById('interes' + i);
-        var plazoInput = document.getElementById('plazo' + i);
-        var retanqueoInput = document.getElementById('retanqueo' + i);
-        var comisionInput = document.getElementById('comision' + i);
+        for (var i = 1; i <= numCreditos; i++) {
+            var montoInput = document.getElementById('monto' + i);
+            var seguroVidaInput = document.getElementById('seguroVida' + i);
+            var interesInput = document.getElementById('interes' + i);
+            var plazoInput = document.getElementById('plazo' + i);
+            var retanqueoInput = document.getElementById('retanqueo' + i);
+            var comisionInput = document.getElementById('comision' + i);
 
-        if (montoInput) { montoInput.value = montoDefecto; }
-        if (seguroVidaInput) { seguroVidaInput.value = seguroVidaDefecto; }
-        if (interesInput) { interesInput.value = interesDefecto; }
-        if (plazoInput) { plazoInput.value = plazoDefecto; }
-        if (retanqueoInput) { retanqueoInput.value = retanqueoDefecto; }
-        if (comisionInput) { comisionInput.value = comisionDefecto; }
+            if (montoInput) { montoInput.value = montoDefecto; }
+            if (seguroVidaInput) { seguroVidaInput.value = seguroVidaDefecto; }
+            if (interesInput) { interesInput.value = interesDefecto; }
+            if (plazoInput) { plazoInput.value = plazoDefecto; }
+            if (retanqueoInput) { retanqueoInput.value = retanqueoDefecto; }
+            if (comisionInput) { comisionInput.value = comisionDefecto; }
+        }
     }
-}
 
 }
 
@@ -447,6 +449,19 @@ function exportToCSV() {
     a.click();
     window.URL.revokeObjectURL(url);
 }
+
+document.getElementById('descargarPDFBtn').addEventListener('click', function() {
+    const contenido = document.getElementById('contenidoParaPDF');
+    const opt = {
+        margin: [0.5, 0.2, 0.5, 0.2], // [top, left, bottom, right] pulgadas
+        filename: 'simulacion_credito.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' }
+    };
+    html2pdf().set(opt).from(contenido).save();
+});
+
 
 
 
