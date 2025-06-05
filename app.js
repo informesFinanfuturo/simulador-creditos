@@ -63,7 +63,7 @@ class CreditSimulator {
         const interesDefecto = this.interesDefecto ? this.interesDefecto.value : 1.5;
         const plazoDefecto = this.plazoDefecto ? this.plazoDefecto.value : 12;
         const retanqueoDefecto = this.retanqueoDefecto ? this.retanqueoDefecto.value : 6;
-        const comisionDefecto = this.comisionFondoDefecto ? this.comisionFondoDefecto.value : 4.0;
+        const comisionDefecto = this.comisionFondoDefecto ? this.comisionFondoDefecto.value : 5.0;
 
         for (let i = 1; i <= numCreditos; i++) {
             const row = document.createElement('tr');
@@ -386,7 +386,7 @@ class CreditSimulator {
         if (this.interesDefecto) this.interesDefecto.value = 1.5;
         if (this.plazoDefecto) this.plazoDefecto.value = 12;
         if (this.retanqueoDefecto) this.retanqueoDefecto.value = 6;
-        if (this.comisionFondoDefecto) this.comisionFondoDefecto.value = 4.0;
+        if (this.comisionFondoDefecto) this.comisionFondoDefecto.value = 5.0;
         this.generateCreditTable();
         this.hideErrors();
         this.resultadosSection.classList.add('hidden');
@@ -399,7 +399,7 @@ class CreditSimulator {
         var interesDefecto = this.interesDefecto ? this.interesDefecto.value : 1.5;
         var plazoDefecto = this.plazoDefecto ? this.plazoDefecto.value : 12;
         var retanqueoDefecto = this.retanqueoDefecto ? this.retanqueoDefecto.value : 6;
-        var comisionDefecto = this.comisionFondoDefecto ? this.comisionFondoDefecto.value : 4.0;
+        var comisionDefecto = this.comisionFondoDefecto ? this.comisionFondoDefecto.value : 5.0;
 
         for (var i = 1; i <= numCreditos; i++) {
             var montoInput = document.getElementById('monto' + i);
