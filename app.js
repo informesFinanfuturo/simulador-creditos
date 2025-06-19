@@ -53,7 +53,6 @@ class CreditSimulator {
     }
 
 
-
     generateCreditTable() {
         const numCreditos = parseInt(this.numCreditosInput.value) || 10;
         this.creditosTable.innerHTML = '';
@@ -72,7 +71,12 @@ class CreditSimulator {
                 '<td><input type="number" id="monto' + i + '" value="' + montoDefecto + '" min="1" step="1000"></td>' +
                 '<td><input type="number" id="seguroVida' + i + '" value="' + seguroVidaDefecto + '" min="0" max="10" step="0.01"></td>' +
                 '<td><input type="number" id="interes' + i + '" value="' + interesDefecto + '" min="0.01" max="100" step="0.01"></td>' +
-                '<td><input type="number" id="plazo' + i + '" value="' + plazoDefecto + '" min="1" max="360" step="1"></td>' +
+                '<td>' +
+                '<input type="number" id="plazo' + i + '" value="' + plazoDefecto + '" min="1" max="18" step="1" oninput="validarPlazoTabla(this, ' + i + ')">' +
+                '<div id="errorPlazo' + i + '" class="error-message"></div>' +
+                '</td>' +
+                '<div id="errorPlazo' + i + '" style="color: #d9534f; font-size: 0.75em; display: none; margin-top: 2px; font-weight: 500;"></div>' +
+                '</td>' +
                 '<td><input type="number" id="retanqueo' + i + '" value="' + retanqueoDefecto + '" min="1" max="360" step="1"></td>' +
                 '<td><input type="number" id="comision' + i + '" value="' + comisionDefecto + '" min="0" step="0.01"></td>';
 
@@ -80,6 +84,7 @@ class CreditSimulator {
             this.creditosTable.appendChild(row);
         }
     }
+
 
     validateInputs() {
         const errors = [];
@@ -450,7 +455,7 @@ function exportToCSV() {
     window.URL.revokeObjectURL(url);
 }
 
-document.getElementById('descargarPDFBtn').addEventListener('click', function() {
+document.getElementById('descargarPDFBtn').addEventListener('click', function () {
     const contenido = document.getElementById('contenidoParaPDF');
     const opt = {
         margin: [0.5, 0.2, 0.5, 0.2], // [top, left, bottom, right] pulgadas
@@ -464,9 +469,188 @@ document.getElementById('descargarPDFBtn').addEventListener('click', function() 
 
 
 
+function validarPlazoConMensaje(input, mensajeElement) {
+    const valor = parseInt(input.value);
+
+    if (valor > 18) {
+        mensajeElement.textContent = "El plazo máximo permitido es 18 meses";
+        mensajeElement.style.display = "block";
+        input.style.borderColor = "#d9534f";
+    } else if (valor < 1 && valor !== '') {
+        mensajeElement.textContent = "El plazo debe ser mayor a 0";
+        mensajeElement.style.display = "block";
+        input.style.borderColor = "#d9534f";
+    } else {
+        mensajeElement.style.display = "none";
+        input.style.borderColor = "";
+    }
+
+    // Verificar todos los inputs después de cada cambio
+    validarTodosLosInputs();
+}
+
+
+
+
+function validarPlazoTabla(input, numeroCredito) {
+    const valor = parseInt(input.value);
+    const mensajeElement = document.getElementById('errorPlazo' + numeroCredito);
+
+    if (valor > 18) {
+        mensajeElement.textContent = "El plazo máximo permitido es 18 meses";
+        mensajeElement.style.display = "block";
+        input.classList.add('input-error');
+    } else if (valor < 1 && valor !== '') {
+        mensajeElement.textContent = "El plazo debe ser mayor a 0";
+        mensajeElement.style.display = "block";
+        input.classList.add('input-error');
+    } else {
+        mensajeElement.style.display = "none";
+        input.classList.remove('input-error');
+    }
+
+    // Verificar estado de los botones después de cada cambio
+    verificarTodosLosInputsTabla();
+}
+
+
+
+
+function verificarTodosLosInputs() {
+    const botonValoresPorDefecto = document.getElementById('aplicarDefectosBtn');
+    const numCreditos = parseInt(document.getElementById('numCreditos').value) || 10;
+    let hayErrores = false;
+
+    // Verificar el input principal de plazo
+    const plazoDefecto = document.getElementById('plazoDefecto');
+    if (plazoDefecto) {
+        const valorPlazoDefecto = parseInt(plazoDefecto.value);
+        if (valorPlazoDefecto > 18 || valorPlazoDefecto < 1) {
+            hayErrores = true;
+        }
+    }
+
+    // Verificar todos los inputs de plazo en la tabla
+    for (let i = 1; i <= numCreditos; i++) {
+        const plazoInput = document.getElementById('plazo' + i);
+        if (plazoInput) {
+            const valorPlazo = parseInt(plazoInput.value);
+            if (valorPlazo > 18 || valorPlazo < 1) {
+                hayErrores = true;
+                break;
+            }
+        }
+    }
+
+    // Activar o desactivar el botón según el resultado
+    botonValoresPorDefecto.disabled = hayErrores;
+}
+
+
+function validarTodosLosInputs() {
+    const plazoDefecto = document.getElementById('plazoDefecto');
+    const botonValoresPorDefecto = document.getElementById('aplicarDefectosBtn');
+    let hayErrores = false;
+
+    // Validar el input principal de plazo
+    if (plazoDefecto) {
+        const valorPlazoDefecto = parseInt(plazoDefecto.value);
+        if (valorPlazoDefecto > 18 || valorPlazoDefecto < 1) {
+            hayErrores = true;
+        }
+    }
+
+    // Activar o desactivar el botón según el resultado
+    botonValoresPorDefecto.disabled = hayErrores;
+
+    return !hayErrores; // Retorna true si no hay errores
+}
+
+document.getElementById('aplicarDefectosBtn').addEventListener('click', function () {
+    if (validarTodosLosInputs()) {
+        // Mostrar la tabla si todos los inputs son válidos
+        document.getElementById('creditosTable').style.display = 'table';
+
+        // Mostrar los botones de acción
+        const actionsContainer = document.querySelector('.actions-container');
+        actionsContainer.classList.remove('hidden');
+        actionsContainer.classList.add('show');
+        actionsContainer.style.display = 'block';
+        // O si usas hidden: actionsContainer.removeAttribute('hidden');
+
+        // Aplicar los valores por defecto a la tabla
+        aplicarValoresPorDefecto();
+
+        // Habilitar botones inicialmente (valores válidos por defecto)
+        habilitarBotonesInicialmente();
+
+        // Verificar estado después de generar la tabla
+        setTimeout(() => {
+            verificarTodosLosInputsTabla();
+        }, 100);
+    }
+});
+
+function habilitarBotonesInicialmente() {
+    const calcularBtn = document.getElementById('calcularBtn');
+    const resetBtn = document.getElementById('resetBtn');
+
+    if (calcularBtn) {
+        calcularBtn.disabled = false;
+        calcularBtn.classList.remove('btn--disabled');
+    }
+
+    if (resetBtn) {
+        resetBtn.disabled = false;
+        resetBtn.classList.remove('btn--disabled');
+    }
+}
+
+function verificarTodosLosInputsTabla() {
+    const calcularBtn = document.getElementById('calcularBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const numCreditos = parseInt(document.getElementById('numCreditos').value) || 10;
+    let hayErrores = false;
+
+    // Verificar todos los inputs de plazo en la tabla
+    for (let i = 1; i <= numCreditos; i++) {
+        const plazoInput = document.getElementById('plazo' + i);
+        if (plazoInput) {
+            const valorPlazo = parseInt(plazoInput.value);
+            if (valorPlazo > 18 || valorPlazo < 1 || isNaN(valorPlazo)) {
+                hayErrores = true;
+                break;
+            }
+        }
+    }
+
+    // Controlar estado de los botones
+    if (calcularBtn) {
+        calcularBtn.disabled = hayErrores;
+        if (hayErrores) {
+            calcularBtn.classList.add('btn--disabled');
+        } else {
+            calcularBtn.classList.remove('btn--disabled');
+        }
+    }
+
+    if (resetBtn) {
+        resetBtn.disabled = hayErrores;
+        if (hayErrores) {
+            resetBtn.classList.add('btn--disabled');
+        } else {
+            resetBtn.classList.remove('btn--disabled');
+        }
+    }
+
+    return !hayErrores;
+}
+
 
 
 // Agregar función de exportación si es necesario
 if (typeof window !== 'undefined') {
     window.exportToCSV = exportToCSV;
 }
+
+window.addEventListener('load', verificarTodosLosInputs);

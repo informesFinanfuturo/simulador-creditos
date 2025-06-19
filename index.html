@@ -198,12 +198,6 @@
             border-color: var(--color-primary);
         }
 
-        .actions-container {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
         .hidden {
             display: none;
         }
@@ -399,15 +393,6 @@
             max-width: 180px;
         }
 
-        /* Contenedor de botones para centrarlos */
-        .actions-container {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            margin: 1.5rem 0;
-            flex-wrap: wrap;
-        }
-
         /* Para pantallas pequeñas */
         @media (max-width: 576px) {
 
@@ -488,11 +473,91 @@
             font-size: 12px;
             border-collapse: collapse;
         }
-th {
-    text-align: center;
-    vertical-align: middle;
-}
 
+        th {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .btn--disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background-color: #f8f9fa;
+            border-color: #ddd;
+        }
+
+        #creditosTable {
+            display: none;
+        }
+
+        .error-message {
+            color: #d9534f;
+            font-size: 0.85em;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .input-error {
+            border-color: #d9534f;
+            background-color: #fff5f5;
+        }
+
+        button:disabled {
+            background-color: #cccccc;
+            color: #666666;
+            cursor: not-allowed;
+        }
+
+        /* Clase para ocultar completamente */
+        .actions-container.hidden {
+            display: none !important;
+        }
+
+        /* Clase para mostrar centrado */
+        .actions-container.show {
+            display: flex !important;
+            flex-direction: row !important;
+            justify-content: center !important;
+            align-items: center !important;
+
+            /* Eliminar posibles interferencias */
+            float: none !important;
+            position: static !important;
+            text-align: center !important;
+
+            /* Espaciado */
+            gap: 15px !important;
+            margin: 20px auto !important;
+            padding: 20px 0 !important;
+
+            /* Ancho */
+            width: 100% !important;
+            max-width: none !important;
+
+            /* Eliminar borders que puedan afectar */
+            box-sizing: border-box !important;
+        }
+
+
+
+
+        /* Estilos específicos para botones deshabilitados */
+        #calcularBtn:disabled,
+        #resetBtn:disabled,
+        .btn--disabled {
+            opacity: 0.6 !important;
+            background-color: #f8f9fa !important;
+            border-color: #ddd !important;
+            color: #6c757d !important;
+            cursor: not-allowed !important;
+            pointer-events: none !important;
+        }
+
+        /* Transición suave para cambios de estado */
+        #calcularBtn,
+        #resetBtn {
+            transition: all 0.3s ease;
+        }
     </style>
 </head>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
@@ -547,8 +612,11 @@ th {
                                     <div class="form-row">
                                         <div class="form-group form-group-third">
                                             <label for="plazoDefecto">Plazo (Meses):</label>
-                                            <input type="number" id="plazoDefecto" value="12" min="1" max="360"
-                                                step="1">
+                                            <input type="number" id="plazoDefecto" value="12" min="1" max="18" step="1"
+                                                oninput="validarPlazoConMensaje(this, document.getElementById('mensajeErrorPlazo'))">
+                                            <div id="mensajeErrorPlazo"
+                                                style="color: red; font-size: 0.85em; display: none; margin-top: 5px;">
+                                            </div>
                                         </div>
                                         <div class="form-group form-group-third">
                                             <label for="retanqueoDefecto">Frecuencia de Retanqueo (Meses):</label>
@@ -562,15 +630,16 @@ th {
                                         </div>
                                     </div>
 
-                                    <button id="aplicarDefectosBtn" class="btn btn--outline">Aplicar Valores por
-                                        Defecto</button>
+                                    <button id="aplicarDefectosBtn" class="btn btn--outline">
+                                        Aplicar Valores por Defecto
+                                    </button>
                                 </div>
                             </div>
 
 
 
                             <div class="table-container">
-                                <table>
+                                <table id="creditosTable" style="display: none;">
                                     <thead>
                                         <tr>
                                             <th>CRÉDITO</th>
@@ -582,13 +651,13 @@ th {
                                             <th>COMISIÓN F.G. (Factura independiente)</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="creditosTable">
+                                    <tbody id="creditosTable" hidden>
                                         <!-- Se llena dinámicamente -->
                                     </tbody>
                                 </table>
                             </div>
 
-                            <div class="actions-container">
+                            <div class="actions-container hidden">
                                 <button id="calcularBtn" class="btn btn--outline">Calcular Simulación</button>
                                 <button id="resetBtn" class="btn btn--outline">Resetear</button>
                             </div>
