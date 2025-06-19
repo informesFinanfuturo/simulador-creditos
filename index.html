@@ -583,8 +583,16 @@
 
                         <div class="card__body">
                             <!-- NUEVOS CAMPOS POR DEFECTO -->
-                            <div style="font-size: 0.8em; color: #666; text-align: center; margin-top: 20px;">
-                                *  Los valores mostrados en esta simulación son aproximados y pueden variar según ajustes anuales u otros factores. Para información detallada y actualizada, se recomienda consultar directamente con un asesor de Finanfuturo.
+                            <div style="font-size: 0.8em; color: #666; text-align: justify; margin-top: 20px;">
+                                * Los valores mostrados en esta simulación son aproximados y pueden variar según ajustes
+                                anuales u otros factores. Para información detallada y actualizada, se recomienda
+                                consultar directamente con un asesor de Finanfuturo.<br>
+                                * Por favor, tenga en cuenta que el valor del semestre se incrementa anualmente, de
+                                acuerdo con las disposiciones establecidas por la Universidad Autónoma de Manizales.<br>
+                                * La comisión FG es un pago independiente y no está incluida dentro de las cuotas del
+                                crédito; el pago se realiza cada vez que se efectúe un desembolso.<br>
+                                * La aprobación de monto, tasa y plazo está sujeta a la capacidad de pago, nivel de
+                                endeudamiento y garantías, según análisis de crédito.<br>
                             </div>
                             <div class="card mb-16">
                                 <div class="card__body">
@@ -600,14 +608,14 @@
                                             <input type="number" id="montoDefecto" value="7000000" min="1" step="1000">
                                         </div>
                                         <div class="form-group form-group-third">
-                                            <label for="seguroVidaDefecto">Seguro de Vida (%):</label>
+                                            <label for="seguroVidaDefecto">Seguro de vida deudores (%):</label>
                                             <input type="number" id="seguroVidaDefecto" value="0.1" min="0" max="10"
-                                                step="0.01">
+                                                step="0.01" readonly>
                                         </div>
                                         <div class="form-group form-group-third">
                                             <label for="interesDefecto">Interés mes vencido (%):</label>
                                             <input type="number" id="interesDefecto" value="1.5" min="0.01" max="100"
-                                                step="0.01">
+                                                step="0.01" readonly>
                                         </div>
                                     </div>
 
@@ -629,7 +637,7 @@
                                         <div class="form-group-third">
                                             <label for="comisionFondoDefecto">Comisión F.G. (%):</label>
                                             <input type="number" id="comisionFondoDefecto" value="5.0" min="0" max="100"
-                                                step="0.01">
+                                                step="0.01" readonly>
                                         </div>
                                     </div>
 
@@ -647,7 +655,7 @@
                                         <tr>
                                             <th>CRÉDITO</th>
                                             <th>MONTO POR PERIODO O SEMESTRE ($)</th>
-                                            <th>SEGURO DE VIDA (%)</th>
+                                            <th>SEGURO DE VIDA DEUDORES(%)</th>
                                             <th>INTERÉS MENSUAL (%)</th>
                                             <th>PLAZO (Meses)</th>
                                             <th>FRECUENCIA DE RETANQUEO (Meses)</th>
@@ -664,16 +672,10 @@
                                 <button id="calcularBtn" class="btn btn--outline">Calcular Simulación</button>
                                 <button id="resetBtn" class="btn btn--outline">Resetear</button>
                             </div>
-
-
                             <div id="errorMessages" class="error-container hidden"></div>
                         </div>
                     </div>
                 </section>
-
-
-
-
 
                 <!-- Resultados -->
                 <section id="resultadosSection" class="hidden">

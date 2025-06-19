@@ -69,8 +69,8 @@ class CreditSimulator {
 
             const html = '<td>' + i + '</td>' +
                 '<td><input type="number" id="monto' + i + '" value="' + montoDefecto + '" min="1" step="1000"></td>' +
-                '<td><input type="number" id="seguroVida' + i + '" value="' + seguroVidaDefecto + '" min="0" max="10" step="0.01"></td>' +
-                '<td><input type="number" id="interes' + i + '" value="' + interesDefecto + '" min="0.01" max="100" step="0.01"></td>' +
+                '<td><input type="number" id="seguroVida' + i + '" value="' + seguroVidaDefecto + '" min="0" max="10" step="0.01" readonly></td>' +
+                '<td><input type="number" id="interes' + i + '" value="' + interesDefecto + '" min="0.01" max="100" step="0.01" readonly></td>' +
                 '<td>' +
                 '<input type="number" id="plazo' + i + '" value="' + plazoDefecto + '" min="1" max="18" step="1" oninput="validarPlazoTabla(this, ' + i + ')">' +
                 '<div id="errorPlazo' + i + '" class="error-message"></div>' +
@@ -78,7 +78,7 @@ class CreditSimulator {
                 '<div id="errorPlazo' + i + '" style="color: #d9534f; font-size: 0.75em; display: none; margin-top: 2px; font-weight: 500;"></div>' +
                 '</td>' +
                 '<td><input type="number" id="retanqueo' + i + '" value="' + retanqueoDefecto + '" min="1" max="360" step="1"></td>' +
-                '<td><input type="number" id="comision' + i + '" value="' + comisionDefecto + '" min="0" step="0.01"></td>';
+                '<td><input type="number" id="comision' + i + '" value="' + comisionDefecto + '" min="0" step="0.01" readonly></td>';
 
             row.innerHTML = html;
             this.creditosTable.appendChild(row);
